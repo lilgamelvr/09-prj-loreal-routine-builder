@@ -50,7 +50,7 @@ follow-up questions.
 ```js
 // ✅ Call the class Cloudflare Worker, no key needed
 const response = await fetch(
-  "https://loreal-routine.your-subdomain.workers.dev/",
+  "holy-mud-afa1.lilgamelvr42.workers.dev",
   {
     method: "POST",
     headers: { "Content-Type": "application/json" },
