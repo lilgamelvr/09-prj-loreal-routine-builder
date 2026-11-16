@@ -69,6 +69,7 @@ body {
   background-color: #fff;
   color: var(--ink);
   box-shadow: 0 5px 18px rgb(23 23 23 / 6%);
+  text-align: left;
 }
 
 .search-section input:focus {
@@ -89,6 +90,7 @@ body {
   font-weight: 500;
   color: var(--ink);
   box-shadow: 0 5px 18px rgb(23 23 23 / 6%);
+  text-align: left;
 }
 
 .search-section select:focus {
@@ -123,6 +125,7 @@ body {
   background: var(--soft-surface);
   margin-bottom: 20px;
   border: 1px solid #f0e9e3;
+  text-align: left;
 }
 
 .chat-message {
@@ -158,6 +161,7 @@ body {
   border: none;
   border-bottom: 1px solid var(--line);
   background: transparent;
+  text-align: left;
 }
 
 .chat-form input:focus {
@@ -270,6 +274,7 @@ body {
   flex-direction: column;
   justify-content: center;
   min-height: 110px;
+  text-align: left;
 }
 
 .product-card h3 {
@@ -383,4 +388,26 @@ body {
 
 .generate-btn i {
   margin-right: 8px;
+}
+
+/* Mirror directional details only when RTL mode is active */
+html[dir="rtl"] .search-section input,
+html[dir="rtl"] .search-section select {
+  text-align: right;
+}
+
+html[dir="rtl"] .search-section input {
+  border-left: 1px solid var(--line);
+  border-right: 4px solid var(--loreal-gold);
+}
+
+html[dir="rtl"] .search-section select {
+  border-left: 1px solid var(--line);
+  border-right: 4px solid var(--loreal-red);
+}
+
+html[dir="rtl"] .chat-window,
+html[dir="rtl"] .chat-form input,
+html[dir="rtl"] .product-card .product-info {
+  text-align: right;
 }

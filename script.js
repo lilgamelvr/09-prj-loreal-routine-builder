@@ -1,3 +1,13 @@
+/* Use RTL only when the browser prefers a right-to-left language */
+const rtlLanguageCodes = ["ar", "fa", "he", "ku", "ps", "sd", "ur", "yi"];
+const preferredLanguages = navigator.languages?.length
+  ? navigator.languages
+  : [navigator.language];
+const usesRtlLanguage = preferredLanguages.some((language) =>
+  rtlLanguageCodes.some((code) => language.toLowerCase().startsWith(code))
+);
+document.documentElement.dir = usesRtlLanguage ? "rtl" : "ltr";
+
 /* Get references to DOM elements */
 const categoryFilter = document.getElementById("categoryFilter");
 const productSearch = document.getElementById("productSearch");
