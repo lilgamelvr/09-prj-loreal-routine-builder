@@ -1,5 +1,6 @@
 /* Get references to DOM elements */
 const categoryFilter = document.getElementById("categoryFilter");
+const productSearch = document.getElementById("productSearch");
 const productsContainer = document.getElementById("productsContainer");
 const selectedProductsList = document.getElementById("selectedProductsList");
 const clearSelectionsButton = document.getElementById("clearSelections");
@@ -66,6 +67,15 @@ async function loadProducts() {
 
 /* Create HTML for displaying product cards */
 function displayProducts(products) {
+  if (products.length === 0) {
+    productsContainer.innerHTML = `
+      <div class="placeholder-message">
+        No products match your search.
+      </div>
+    `;
+    return;
+  }
+
   productsContainer.innerHTML = products
     .map(
       (product) => `
@@ -95,7 +105,28 @@ function displayProducts(products) {
   `
     )
     .join("");
-  clearSelectionsButton.disabled = false;
+}
+
+/* Filter products by both the selected category and search text */
+function filterProducts() {
+  const searchTerm = productSearch.value.trim().toLowerCase();
+  const selectedCategory = categoryFilter.value;
+  const filteredProducts = allProducts.filter((product) => {
+    const matchesCategory =
+      !selectedCategory || product.category === selectedCategory;
+    const searchableText = [
+      product.name,
+      product.brand,
+      product.category,
+      product.description,
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return matchesCategory && searchableText.includes(searchTerm);
+  });
+
+  displayProducts(filteredProducts);
 }
 
 /* Show the products the user has selected */
@@ -137,17 +168,13 @@ async function toggleProduct(productId) {
       selectedProducts.push(product);
       saveSelectedProducts();
       displaySelectedProducts();
-      displayProducts(products.filter(
-        (item) => item.category === categoryFilter.value
-      ));
+      filterProducts();
     }
   } else {
     selectedProducts.splice(productIndex, 1);
     saveSelectedProducts();
     displaySelectedProducts();
-    displayProducts(allProducts.filter(
-      (item) => item.category === categoryFilter.value
-    ));
+    filterProducts();
   }
 }
 
@@ -168,9 +195,7 @@ clearSelectionsButton.addEventListener("click", () => {
   selectedProducts.length = 0;
   saveSelectedProducts();
   displaySelectedProducts();
-  displayProducts(allProducts.filter(
-    (item) => item.category === categoryFilter.value
-  ));
+  filterProducts();
 });
 
 productsContainer.addEventListener("keydown", (e) => {
@@ -198,18 +223,15 @@ selectedProductsList.addEventListener("click", (e) => {
   }
 });
 
-/* Filter and display products when category changes */
-categoryFilter.addEventListener("change", async (e) => {
-  const products = await loadProducts();
-  const selectedCategory = e.target.value;
+/* Filter products when the category or search text changes */
+categoryFilter.addEventListener("change", async () => {
+  await loadProducts();
+  filterProducts();
+});
 
-  /* filter() creates a new array containing only products 
-     where the category matches what the user selected */
-  const filteredProducts = products.filter(
-    (product) => product.category === selectedCategory
-  );
-
-  displayProducts(filteredProducts);
+productSearch.addEventListener("input", async () => {
+  await loadProducts();
+  filterProducts();
 });
 
 /* Show the conversation without treating AI responses as HTML */
